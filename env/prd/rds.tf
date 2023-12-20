@@ -1,3 +1,4 @@
+/*
 module "rds" {
   source = "../../modules/rds"
 
@@ -17,3 +18,4 @@ module "rds" {
   rds_sg_rules_cidr     = var.rds_sg_rules_cidr
 
 }
+*/

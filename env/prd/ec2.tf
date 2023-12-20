@@ -1,3 +1,4 @@
+/*
 module "public_ec2_instance_gw" {
   source                  = "../../modules/ec2/public_ec2"
   instance_count          = var.public_instance_count
@@ -22,6 +23,7 @@ module "private_ec2_instance_for_service" {
   vpc_id                   = module.vpc.vpc_id
   private_instance_sg_rule = var.private_instance_sg_rule
 }
+*/
 
 /* 새로운 용도의 ec2가 필요하면 추가 module block 생성
 module "private_ec2_instance_for_service" {

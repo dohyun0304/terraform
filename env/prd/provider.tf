@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "bestrongkids-tfstate"
+    bucket         = "toy-terraform-tfstate"
     key            = "tfstate/terraform.tfstate"
     region         = "ap-northeast-2"
     encrypt        = true
@@ -16,8 +16,8 @@ terraform {
 }
 
 provider "aws" {
-  #access_key = var.aws_access_key #git action에서는 생략
-  #secret_key = var.aws_secret_key #git action에서는 생략
+  access_key = var.aws_access_key #git action에서는 생략
+  secret_key = var.aws_secret_key #git action에서는 생략
   region = var.aws_region
 }
 

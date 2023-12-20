@@ -31,11 +31,7 @@ module "eks" {
   }
 
   vpc_id = var.vpc_id
-  # vpc_name                 = var.vpc_name
   subnet_ids = [for subnet_id in var.node_subnet_ids : subnet_id]
-  #control_plane_subnet_ids = [for subnet_id in aws_subnet.node_subnet : subnet_id.id]
-
-  # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     instance_types             = [var.node_instance_type]
     iam_role_attach_cni_policy = true
@@ -55,7 +51,6 @@ module "eks" {
           encrypted   = true
         }
       }
-      #iam_role_attach_cni_policy = true
       tags = {
         Name = "eks-node"
       }
@@ -74,7 +69,7 @@ module "eks" {
   #   }
   # }
 
-  # aws-auth configmap
+  # eks configmap aws-auth에 콘솔 사용자 혹은 역할 등록
   manage_aws_auth_configmap = true
 
   #   aws_auth_roles = [
@@ -87,29 +82,27 @@ module "eks" {
 
   aws_auth_users = [
     {
-      userarn  = "arn:aws:iam::902643419733:user/mor1"
-      username = "mor1"
+      userarn  = "arn:aws:iam::902643419733:user/dhlee"
+      username = "dhlee"
       groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::902643419733:user/mor2"
-      username = "mor2"
-      groups   = ["system:masters"]
-    },
+    }
   ]
 
-  #   aws_auth_accounts = [
-  #     "777777777777",
-  #     "888888888888",
-  #   ]
-
-  #   tags = {
-  #     Environment = "dev"
-  #     Terraform   = "true"
-  #   }
-  # }
+}
+#aws-auth
+data "aws_eks_cluster" "default" {
+  name = module.eks.cluster_name
 }
 
+data "aws_eks_cluster_auth" "default" {
+  name = module.eks.cluster_name
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.default.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.default.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.default.token
+}
 
 #보안그룹 생성 코드
 resource "aws_security_group" "node_security_group" {

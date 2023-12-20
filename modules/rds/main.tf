@@ -42,6 +42,7 @@ resource "aws_db_instance" "rds_instance" {
 resource "aws_security_group" "rds_sg" {
   name   = "${var.rds_name}-sg"
   vpc_id = var.vpc_id
+  depends_on = [aws_subnet.rds_subnet_a, aws_subnet.rds_subnet_b]
 }
 
 resource "aws_security_group_rule" "rds_sg_rules_cidr" {
