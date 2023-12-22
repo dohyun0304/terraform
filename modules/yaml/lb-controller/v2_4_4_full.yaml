@@ -719,7 +719,7 @@ spec:
     spec:
       containers:
       - args:
-        - --cluster-name=eks #eks 이름으로 변경
+        - --cluster-name=eks #eks 이름으로 수정
         - --ingress-class=alb
         image: amazon/aws-alb-ingress-controller:v2.4.4
         livenessProbe:

@@ -88,6 +88,16 @@ module "eks" {
     }
   ]
   enable_irsa = true
+  node_security_group_additional_rules = {
+    ingress_allow_access_from_control_plane = {
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 9443
+      to_port                       = 9443
+      source_cluster_security_group = true
+      description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
+    }
+  }
 }
 #aws-auth
 data "aws_eks_cluster" "default" {
@@ -176,3 +186,4 @@ resource "aws_security_group_rule" "node_sg_rules_sg" {
   source_security_group_id = aws_security_group.cluster_security_group.id
 
 }
+
