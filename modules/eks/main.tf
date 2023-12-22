@@ -87,7 +87,7 @@ module "eks" {
       groups   = ["system:masters"]
     }
   ]
-
+  enable_irsa = true
 }
 #aws-auth
 data "aws_eks_cluster" "default" {
