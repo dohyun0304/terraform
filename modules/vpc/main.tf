@@ -62,7 +62,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 }
 
-resource "aws_route_table" "public_rt" {
+resource "aws_route_table" "public_rt" { #IGW 연결
   for_each = var.public_subnets
 
   vpc_id = aws_vpc.main.id
@@ -82,7 +82,27 @@ resource "aws_route_table_association" "public_subnets_rt_association" {
   route_table_id = lookup(aws_route_table.public_rt, each.key).id
 }
 
-resource "aws_route_table" "node_rt" {
+resource "aws_route_table" "private_rt" { #nat gw 연결
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.vpc_name}-private-rt"
+  }
+}
+
+resource "aws_route" "private_rt_nat" {
+  route_table_id         = aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat_gw[0].id
+}
+
+resource "aws_route_table_association" "private_subnets_rt_association" {
+  for_each       = { for s in keys(var.private_subnets) : s => s }
+  subnet_id      = aws_subnet.private[each.key].id
+  route_table_id = aws_route_table.private_rt.id
+}
+
+resource "aws_route_table" "node_rt" { #nat gw 연결
   vpc_id = aws_vpc.main.id
 
   route {
@@ -90,7 +110,6 @@ resource "aws_route_table" "node_rt" {
     nat_gateway_id = aws_nat_gateway.nat_gw[0].id
   }
 }
-
 
 resource "aws_route_table_association" "node_rt_association" {
   for_each       = aws_subnet.node_subnet
