@@ -14,6 +14,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "terraform" {
+  description = "managed by terraform"
+  type        = string
+}
+
 #####################VPC#####################
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
