@@ -2,4 +2,4 @@
 
 #terraform apply 시 tfvars file 필요하며, 해당 repo는 plan 까지만 git action으로 구현
 
-#대부분의 변수 값은 tfvars로 관리하며 yaml 등 그외의 변경 사항은 '수정'으로 검색
+#대부분의 변수 값은 tfvars로 관리하며 yaml 등 그외의 변경 사항은 '수정'
